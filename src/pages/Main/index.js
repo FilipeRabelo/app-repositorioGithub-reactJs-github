@@ -116,10 +116,11 @@ export default function Main() {
           setNewRepo('');
         }
 
-        if (error.response.status === 403) {  // Verifica se o erro é de repositório não encontrado
-          setErrorMessage('Requisicao negada! Limite Api Atingido!');
-          setNewRepo('');
-        }
+        // if (error.response.status === 403) {  // Verifica se o erro é de repositório não encontrado
+        //   setErrorMessage('Requisicao negada! Limite Api Atingido!');
+        //   setNewRepo('');
+        // }
+
         setIsModalOpen(true);
 
 
@@ -139,15 +140,6 @@ export default function Main() {
   }
 
 
-
-  // const handleDelete = useCallback((repo) => {
-  //   const encontrar = repositorios.filter(r => r.name !== repo); // filter - retorna tudo menos o ue foi clicado para deletar
-  //   setRepositorio(encontrar);    
-
-  //   setErrorMessage('Repositório Deletado!');
-  //   setIsModalOpen(true);
-
-  // }, [repositorios]);
 
 
   const handleDelete = useCallback((repo) => {

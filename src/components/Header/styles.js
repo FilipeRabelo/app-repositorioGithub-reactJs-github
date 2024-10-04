@@ -25,6 +25,10 @@ export const Head = styled.header`
   box-shadow: 0 0 15px rgba(138, 43, 226, 1);
   // animation: ${pulse} 1.5s infinite alternate; 
 
+  div{
+    
+  }
+
 .divLink {
   display: flex;
   flex-direction: row;
@@ -45,9 +49,9 @@ export const Head = styled.header`
   font-size: 14;
   transition: all 1s;
 
-  &:hover {
-    transform: scale(1.2);
-    color: #DC143C;
-  }
+  // &:hover {
+  //   transform: scale(1.2);
+  //   color: #DC143C;
+  // }
 }
 `;
