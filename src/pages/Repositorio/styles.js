@@ -14,8 +14,9 @@ export const Container = styled.div`
   background-color: #FFF;
   border-radius:4px;
   box-shadow: 0 0 20pc rgba(0, 0, 0, 0.2);
-  padding: 0 30px;
+  padding: 30px;
   margin: 80px auto;
+  box-shadow: 0 0 15px rgba(255, 7, 58, 1);
 `;
 
 export const Owner = styled.header`
@@ -47,8 +48,9 @@ export const Owner = styled.header`
 `;
 
 
-export const BackButton = styled.button`
+export const BackButton = styled(Link)`
   border: none;
+  outline: 0;
   background-color: transparent;
   padding-top: 16px;
 `;

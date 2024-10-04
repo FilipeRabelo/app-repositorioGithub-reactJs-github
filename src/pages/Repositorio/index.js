@@ -63,9 +63,10 @@ export default function Repositorio() {
 
   return (
     <Container>
-      <BackButton>
+      <BackButton to={'/'}>
         <FaArrowLeft color='#DC143C' size={35}/>
       </BackButton>
+
       <Owner>
         <img
           src={ repositorioData.owner.avatar_url }

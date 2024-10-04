@@ -14,10 +14,9 @@ export const Container = styled.div`
   max-width: 700px;
   background-color: #FFFFFF;
   border-radius: 6px;
-  // box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   padding: 30px;
   margin: 80px auto;
-  box-shadow: 0 0 10px rgba(255, 7, 58, 1);
+  box-shadow: 0 0 15px rgba(255, 7, 58, 1);
   // animation: ${ pulse } 1s infinite alternate;
   border: 1px solid rgba(0, 0, 0, 0.2);
 
@@ -116,6 +115,8 @@ export const SubmitButton = styled.button.attrs(props => ({
 export const List = styled.ul`
   list-style: nome; !important;
   margin-top: 20px;
+  align-items: center;
+  justify-content: center;
   
 
   li{
@@ -131,6 +132,7 @@ export const List = styled.ul`
     marker: none;
     color: #000;
     text-transform: capitalize;
+    font-size: 16px;
 
     & + li {
       margin-top: 1px solid #eee
@@ -140,7 +142,7 @@ export const List = styled.ul`
       color: #0D2636,
       font-weight: bold;
       text-decoration: none;
-      padding-right: 2px;
+      padding-right: 5px;
       transition: all 0.5s;
 
       &:hover{
@@ -150,6 +152,7 @@ export const List = styled.ul`
 
     span{
       font-weight: bold;
+      
     }
   }
 `;
@@ -161,7 +164,7 @@ export const DeleteButton = styled.button.attrs({
 })`
   background-color: transparent;
   border: none;
-  padding: 8px 7px; 
+  padding: 10px 7px 8px 7px; 
   outline: 0;
   border-radius: 4px;
   transition: all 0.5s;
