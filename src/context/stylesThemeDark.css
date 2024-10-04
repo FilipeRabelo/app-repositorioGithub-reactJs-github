@@ -1,0 +1,14 @@
+/* styles.css */
+body {
+  transition: background-color 0.3s ease;
+}
+
+body.light {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+body.dark {
+  background-color: #101026;
+  color: #ffffff;
+}
