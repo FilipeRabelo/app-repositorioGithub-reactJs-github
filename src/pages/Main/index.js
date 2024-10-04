@@ -117,12 +117,12 @@ export default function Main() {
         }
 
         // // Verificar o limite de requisições
-        const rateLimit = await api.get('/rate_limit');
-        if (rateLimit){
-          console.log('Limite de requisições:', rateLimit.data);
-          setErrorMessage('Limite de requisições atingido');
-          setNewRepo('');
-        }
+        // const rateLimit = await api.get('/rate_limit');
+        // if (rateLimit){
+        //   console.log('Limite de requisições:', rateLimit.data);
+        //   setErrorMessage('Limite de requisições atingido');
+        //   setNewRepo('');
+        // }
 
 
         setIsModalOpen(true);
