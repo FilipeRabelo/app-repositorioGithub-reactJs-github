@@ -116,13 +116,16 @@ export default function Main() {
           setNewRepo('');
         }
 
-        // if (error.response.status === 403) {  // Verifica se o erro é de repositório não encontrado
-        //   setErrorMessage('Requisicao negada! Limite Api Atingido!');
-        //   setNewRepo('');
-        // }
+        // // Verificar o limite de requisições
+        const rateLimit = await api.get('/rate_limit');
+        if (rateLimit){
+          console.log('Limite de requisições:', rateLimit.data);
+          setErrorMessage('Limite de requisições atingido');
+          setNewRepo('');
+        }
+
 
         setIsModalOpen(true);
-
 
       } finally {
         setLoading(false);                          // finaliza o loading
