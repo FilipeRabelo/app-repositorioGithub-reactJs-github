@@ -85,21 +85,47 @@ export const IssuesList = styled.ul`
     div{
       flex:1;
       margin-left: 12px;
+
+      p{
+        margin-top: 10px;
+        font-size: 12px;
+        color: #000;
+      }
     }
 
     strong{
       font-size:  15px;
 
       a{
+      display: block;
         text-decoration: none;
         color: #222;
-        transition: 0.3s;
+        transition: 0.2s;
 
         &:hover{
           color: #6611a7;
         }
       }
+
+      span{
+        display: inline-block;
+        background-color: #6F42C1;
+        color: #FFF;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 7px;
+        margin-top: 10px;
+
+        & + span{
+          margin-left: 10px;
+        }
+      }
+
     }
+
+
+
   }
 
 `;

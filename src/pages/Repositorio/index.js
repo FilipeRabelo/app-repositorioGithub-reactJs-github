@@ -84,9 +84,9 @@ export default function Repositorio() {
 
               </strong>
 
-              <p>{issue.user.login}</p>
-
+              <p>Nome Usuario: <b>{ issue.user.login }</b></p>
             </div>
+
           </li>
         ))}
       </IssuesList>
