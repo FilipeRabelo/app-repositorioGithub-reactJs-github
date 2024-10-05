@@ -6,7 +6,7 @@ export default createGlobalStyle`
     padding: 0;
     outline: 0;
     box-sizing: border-box;
-    text-transform: capitalize;
+    // text-transform: capitalize;
   }
 
   html, body, #root{
@@ -18,13 +18,17 @@ export default createGlobalStyle`
     // background-color: #000;
     font-size: 14px;
     -webkit-font-smoothing: antialiased !important;
-    text-transform: capitalize;
+    // text-transform: capitalize;
   }
 
   body, input, button{
     color: #222;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
+  }
+
+  input{
+    text-transform: lowercase;;
   }
 
   button{

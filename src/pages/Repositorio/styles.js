@@ -7,6 +7,7 @@ export const Loading = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
+  text-transform: capitalize;
 `;
 
 export const Container = styled.div`
