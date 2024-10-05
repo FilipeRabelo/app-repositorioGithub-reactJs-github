@@ -39,10 +39,17 @@ const ModalExcluir = ({ isOpen, onClose, onConfirm, message }) => {
 
 
 export default function Main() {
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); // Novo estado para o modal de confirmação
+  // const [errorMessage, setErrorMessage] = useState('');
+  // const [repoToDelete, setRepoToDelete] = useState(null); // Estado para armazenar o repositório a ser deletado
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); // Novo estado para o modal de confirmação
-  const [errorMessage, setErrorMessage] = useState('');
-  const [repoToDelete, setRepoToDelete] = useState(null); // Estado para armazenar o repositório a ser deletado
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); // Modal de confirmação
+  const [errorMessage, setErrorMessage] = useState(''); // Mensagem de erro
+  const [confirmMessage, setConfirmMessage] = useState(''); // Mensagem de confirmação de exclusão
+  const [repoToDelete, setRepoToDelete] = useState(null); // Repositório a ser deletado
+
 
   const [newRepo, setNewRepo] = useState('');             // input q capta o q digita
   const [repositorios, setRepositorio] = useState([]);    // [] para armazenar todos os repositórios cadastrados
@@ -78,9 +85,9 @@ export default function Main() {
       try {
 
         if (newRepo === '') {                                         // verificando se foi digitado algo
-          setErrorMessage('Por favor, informe o Repositório Desejado.');     // modal
+          setErrorMessage('Informe o Repositório Desejado.');     // modal
           setIsModalOpen(true);
-          throw new Error('Por favor, informe o Repositório Desejado.');
+          throw new Error('Informe o Repositório Desejado.');
         }
 
 
@@ -91,10 +98,10 @@ export default function Main() {
 
 
         if (hasRepo) {                                  // verificando se repo ja existe
-          setErrorMessage('Este repositório já está Cadastrado.');
+          setErrorMessage('Repositório já está Cadastrado.');
           setIsModalOpen(true);
           setNewRepo('');
-          throw new Error('Este repositório já está Cadastrado.');     // se tem o repositorio vou barrar
+          throw new Error('Repositório já está Cadastrado.');     // se tem o repositorio vou barrar
         }
 
 
@@ -106,30 +113,66 @@ export default function Main() {
         setRepositorio([...repositorios, data]);    // pega tudo q tem e adiciona o data, novo cadastro
         setNewRepo('');                             // para limpar o input
 
-
       } catch (error) {
         console.log(error);
 
-
-        if (error.response && error.response.status === 404) {  // Verifica se o erro é de repositório não encontrado
-          setErrorMessage('Repositório NÂO existe no GitHub');
+        if (error.response && error.response.status === 404) {
+          setErrorMessage('Repositório não existe no GitHub');
           setNewRepo('');
+        } 
+
+
+        try {
+          // Verificar o limite de requisições
+          const rateLimit = await api.get('/rate_limit');
+          console.log('Limite de requisições:', rateLimit.data);
+
+          if (rateLimit.data.resources.core.remaining === 0) {
+            setErrorMessage('Limite de requisições atingido');
+            setNewRepo('');
+          }
+
+        } catch (rateError) {
+          console.error('Erro ao verificar o limite de requisições:', rateError);
         }
-
-        // // Verificar o limite de requisições
-        // const rateLimit = await api.get('/rate_limit');
-        // if (rateLimit){
-        //   console.log('Limite de requisições:', rateLimit.data);
-        //   setErrorMessage('Limite de requisições atingido');
-        //   setNewRepo('');
-        // }
-
 
         setIsModalOpen(true);
 
       } finally {
-        setLoading(false);                          // finaliza o loading
+        setLoading(false); // Finaliza o loading
       }
+
+      // } catch (error) {
+      //   console.log(error);
+
+
+      //   if (error.response && error.response.status === 404) {  // Verifica se o erro é de repositório não encontrado
+      //     setErrorMessage('Repositório não existe no GitHub');
+      //     setNewRepo('');
+      //   } else if (error.response && error.response.status === 403) {          
+      //     setErrorMessage('Limite de requisições atingido');
+      //     setNewRepo('');
+      //   }
+
+
+
+      //   // Verificar o limite de requisições
+      //   // const rateLimit = await api.get('/rate_limit');
+      //   // if (rateLimit){
+      //   //   console.log('Limite de requisições:', rateLimit.data);
+      //   //   setErrorMessage('Limite de requisições atingido');
+      //   //   setNewRepo('');
+      //   // }
+
+      //   // Verificar o limite de requisições
+      //   const rateLimit = await api.get('/rate_limit');
+      //   console.log('Limite de requisições:', rateLimit.data);
+
+      //   setIsModalOpen(true);
+
+      // } finally {
+      //   setLoading(false);                          // finaliza o loading
+      // }
     }
 
     submit();
@@ -145,18 +188,34 @@ export default function Main() {
 
 
 
+  // const handleDelete = useCallback((repo) => {
+  //   setRepoToDelete(repo); // Armazena o repositório a ser deletado
+  //   setErrorMessage('Deseja deletar este repositório?');
+  //   setIsConfirmModalOpen(true); // Abre o modal de confirmação
+  // }, []);
+
   const handleDelete = useCallback((repo) => {
-    setRepoToDelete(repo); // Armazena o repositório a ser deletado
-    setErrorMessage('Deseja realmente deletar este repositório?');
-    setIsConfirmModalOpen(true); // Abre o modal de confirmação
+    setRepoToDelete(repo);
+    setConfirmMessage('Deseja deletar este repositório?'); // Usa um estado diferente para a mensagem de confirmação
+    setIsConfirmModalOpen(true);
   }, []);
 
   // Função para confirmar a deleção
+  // const confirmDelete = useCallback(() => {
+  //   const encontrar = repositorios.filter(r => r.name !== repoToDelete); // Remove o repositório
+  //   setRepositorio(encontrar);
+  //   setIsConfirmModalOpen(false); // Fecha o modal de confirmação
+  //   setErrorMessage('Repositório Deletado!'); // Mensagem de sucesso
+  //   setIsModalOpen(true); // Abre o modal de sucesso
+  // }, [repositorios, repoToDelete]);
+
+  // Função para confirmar a deleção
   const confirmDelete = useCallback(() => {
-    const encontrar = repositorios.filter(r => r.name !== repoToDelete); // Remove o repositório
-    setRepositorio(encontrar);
-    setIsConfirmModalOpen(false); // Fecha o modal de confirmação
-    setErrorMessage('Repositório Deletado!'); // Mensagem de sucesso
+    const filteredRepos = repositorios.filter(r => r.name !== repoToDelete);
+    setRepositorio(filteredRepos);
+    setIsConfirmModalOpen(false);
+    setConfirmMessage(''); // Limpa a mensagem de confirmação após a deleção
+    setErrorMessage('Repositório Deletado!'); // Usa o estado de erro para exibir o sucesso
     setIsModalOpen(true); // Abre o modal de sucesso
   }, [repositorios, repoToDelete]);
 
@@ -212,7 +271,7 @@ export default function Main() {
               { repo.name }
             </span>
 
-            <Link to={ `/repositorio/${ encodeURIComponent(repo.name)}`}>   
+            <Link to={ `/repositorio/${ encodeURIComponent(repo.name) }` }>
               <FaBars size={ 20 } color="#6F42C1" />
             </Link>
 
@@ -225,7 +284,7 @@ export default function Main() {
       <ModalExcluir
         isOpen={ isConfirmModalOpen }
         onClose={ closeConfirmModal }
-        message={ errorMessage }
+        message={ confirmMessage }
         onConfirm={ confirmDelete } // Passa a função de confirmação
       />
     </Container>
@@ -234,144 +293,3 @@ export default function Main() {
 }
 
 //encodeURIComponent(repo.name) para retirar a barra / entre os parâmetros da URL
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useState, useCallback, useEffect } from 'react';
-// import { FaGithub, FaPlus, FaSpinner, FaBars, FaTrash } from 'react-icons/fa';
-// import { Container, Form, SubmitButton, List, DeleteButton } from './styles';
-
-// import api from '../../services/api';
-
-// export default function Main() {
-
-//   const [newRepo, setNewRepo] = useState('');
-//   const [repositorios, setRepositorios] = useState([]);
-//   const [loading, setLoading] = useState(false);
-//   const [alert, setAlert] = useState(null);
-
-//   // Buscar
-//   useEffect(() => {
-//     const repoStorage = localStorage.getItem('repos');
-
-//     if (repoStorage) {
-//       setRepositorios(JSON.parse(repoStorage));
-//     }
-
-//   }, []);
-
-
-//   // Salvar alterações
-//   useEffect(() => {
-//     localStorage.setItem('repos', JSON.stringify(repositorios));
-//   }, [repositorios]);
-
-//   const handleSubmit = useCallback((e) => {
-//     e.preventDefault();
-
-//     async function submit() {
-//       setLoading(true);
-//       setAlert(null);
-//       try {
-
-//         if (newRepo === '') {
-//           throw new Error('Você precisa indicar um repositorio!');
-//         }
-
-//         const response = await api.get(`repos/${ newRepo }`);
-
-//         const hasRepo = repositorios.find(repo => repo.name === newRepo);
-
-//         if (hasRepo) {
-//           throw new Error('Repositorio Duplicado');
-//         }
-
-//         const data = {
-//           name: response.data.full_name,
-//         }
-
-//         setRepositorios([...repositorios, data]);
-//         setNewRepo('');
-//       } catch (error) {
-//         setAlert(true);
-//         console.log(error);
-//       } finally {
-//         setLoading(false);
-//       }
-
-//     }
-
-//     submit();
-
-//   }, [newRepo, repositorios]);
-
-//   function handleinputChange(e) {
-//     setNewRepo(e.target.value);
-//     setAlert(null);
-//   }
-
-//   const handleDelete = useCallback((repo) => {
-//     const find = repositorios.filter(r => r.name !== repo);
-//     setRepositorios(find);
-//   }, [repositorios]);
-
-
-//   return (
-//     <Container>
-
-//       <h1>
-//         <FaGithub size={ 25 } />
-//         Meus Repositorios
-//       </h1>
-
-//       <Form onSubmit={ handleSubmit } error={ alert }>
-//         <input
-//           type="text"
-//           placeholder="Adicionar Repositorios"
-//           value={ newRepo }
-//           onChange={ handleinputChange }
-//         />
-
-//         <SubmitButton loading={ loading ? 1 : 0 }>
-//           { loading ? (
-//             <FaSpinner color="#FFF" size={ 14 } />
-//           ) : (
-//             <FaPlus color="#FFF" size={ 14 } />
-//           ) }
-//         </SubmitButton>
-
-//       </Form>
-
-//       <List>
-//         { repositorios.map(repo => (
-//           <li key={ repo.name }>
-//             <span>
-//               <DeleteButton onClick={ () => handleDelete(repo.name) }>
-//                 <FaTrash size={ 14 } />
-//               </DeleteButton>
-//               { repo.name }
-//             </span>
-//             <a href="">
-//               <FaBars size={ 20 } />
-//             </a>
-//           </li>
-//         )) }
-//       </List>
-
-//     </Container>
-//   )
-// }

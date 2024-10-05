@@ -15,8 +15,8 @@ export const Container = styled.div`
   border-radius:4px;
   box-shadow: 0 0 20pc rgba(0, 0, 0, 0.2);
   padding: 30px;
-  margin: 80px auto;
-  box-shadow: 0 0 15px rgba(255, 7, 58, 1);
+  margin: 50px auto;
+  box-shadow: 0 0 10px rgba(255, 7, 58, 1);
 
   @media (max-width: 750px) {
     max-width: 90%;
@@ -62,8 +62,7 @@ export const BackButton = styled(Link)`
 
 export const IssuesList = styled.ul`
   margin-top: 30px;
-  padding-top: 30px;
-  border-top: 1px solid #DC143C;
+  // border-top: 1px solid #DC143C;
   list-style: none;
 
   li{
@@ -124,8 +123,73 @@ export const IssuesList = styled.ul`
 
     }
 
+  }
+`;
 
+export const PageActions = styled.div`
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  border-top: 1px solid #DC143C;
 
+  button:disabled{
+    cursor: not-allowed;
+    opacity: 0.5;
+    height: 30px;
   }
 
+  .btnVoltar{
+    margin-top: 24px;
+    height: 30px;
+    outline: 0;
+    border: 0;
+    background-color: #DC143C;
+    color: #000;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    // transition: all 0.8s;
+  }
+
+  .btnProximo{
+    margin-top: 24px;
+    height: 30px;
+    outline: 0;
+    border: 0;
+    background-color: #39FF14;
+    color: #000;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    // transition: all 0.8s;
+  }
+
+  // button:hover{
+  //   transform: scale(1.1);
+  // }
+`;
+
+export const FilterList = styled.div`
+
+  border-top: 1px solid #DC143C;
+  padding-top: 16px;
+
+  margin: 15px 0;
+  button{
+    outline: 0;
+    border: 0;
+    padding: 8px;
+    border-radius: 4px;
+    margin: 0 3px;
+    background-color: #6F42C1;
+    color: #000;
+    opacity: 80%;
+
+    &:nth-child(${props => props.active + 1}){
+      background-color: #DC143C;
+      color: #FFF;
+      opacity: 100%;
+    }
+  }
 `;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';               // useParams para obter os parâmetros da rota
-import { Container, Owner, Loading, BackButton, IssuesList } from './styles';
+import { Container, Owner, Loading, BackButton, IssuesList, PageActions, FilterList } from './styles';
 import { FaArrowLeft } from 'react-icons/fa'
 import api from '../../services/api';
 
@@ -10,18 +10,29 @@ export default function Repositorio() {
   const [repositorioData, setRepositorioData] = useState({});
   const [issues, setIssues] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);                      // paginação - começa na pagina 1
+
+  const [filters, setFilters] = useState([                  // array de objetos
+    { state: 'all', label: 'Todas', active: true },
+    { state: 'open', label: 'Abertas', active: false },
+    { state: 'closed', label: 'Fechadas', active: false },
+  ]);
+
+  const [filterIndex, setFilterIndex] = useState(0);
+
 
   useEffect(() => {                                         // buscando as info da pagina    
     async function load() {
-      const nomeRepo = decodeURIComponent(repositorio);
+
+      const nomeRepo = decodeURIComponent(repositorio);     // importante - repositorio
 
       try {
         const [repositorioData, issuesData] = await Promise.all([
 
-          api.get(`/repos/${ nomeRepo }`),                  // indo na requisicao do repositorio e get nas info
+          api.get(`/repos/${ nomeRepo }`),                  // indo na requisição do repositorio e get nas info
           api.get(`/repos/${ nomeRepo }/issues`, {
             params: {
-              state: 'open',
+              state: filters.find(f => f.active).state,     // vai colocar all
               per_page: 5,
             },
           }),
@@ -46,6 +57,35 @@ export default function Repositorio() {
   }, [repositorio]);
 
 
+  // paginação
+
+  useEffect(() => {                                // para renderizar a lista e mudar de pagina                                            
+    async function loadIssue() {
+      const nomeRepo = decodeURIComponent(repositorio);
+
+      const response = await api.get(`/repos/${ nomeRepo }/issues`, {
+        params: {
+          state: filters[filterIndex].state,    // filters[0].state
+          page,
+          per_page: 5
+        },
+      });
+
+      setIssues(response.data);                     // atualizando a state
+    }
+
+    loadIssue();
+  }, [filterIndex, filters, repositorio, page]);
+
+  function handlePage(action) {
+    setPage(action === 'back' ? page - 1 : page + 1);
+  }
+
+  function handleFilter(index) {
+    setFilterIndex(index);
+  }
+
+
   if (loading) {
     return (
       <Loading>
@@ -56,8 +96,8 @@ export default function Repositorio() {
 
   return (
     <Container>
-      <BackButton to={'/'}>
-        <FaArrowLeft color='#DC143C' size={35}/>
+      <BackButton to={ '/' }>
+        <FaArrowLeft color='#DC143C' size={ 35 } />
       </BackButton>
 
       <Owner>
@@ -69,27 +109,59 @@ export default function Repositorio() {
         <p>{ repositorioData.description }</p>
       </Owner>
 
+      <FilterList active={ filterIndex }>
+        { filters.map((filter, index) => (
+
+          <button
+            type='button'
+            key={ filter.label }
+            onClick={ () => handleFilter(index) }
+          >
+            { filter.label }
+          </button>
+
+        )) }
+      </FilterList>
+
       <IssuesList>
         { issues.map(issue => (
-          <li key={String(issue.id)}>  
-            <img src={issue.user.avatar_url} alt={issue.user.login}/>
+          <li key={ String(issue.id) }>
+            <img src={ issue.user.avatar_url } alt={ issue.user.login } />
 
             <div>
               <strong>
-                <a href={issue.html_url}>{issue.title}</a>
+                <a href={ issue.html_url }>{ issue.title }</a>
 
-                {issue.labels.map(label => (
-                  <span key={String(label.id)}>{label.name}</span>
-                ))}
+                { issue.labels.map(label => (
+                  <span key={ String(label.id) }>{ label.name }</span>
+                )) }
 
               </strong>
-
-              <p>Nome Usuario: <b>{ issue.user.login }</b></p>
+              <p>Nome Usuário: <b>{ issue.user.login }</b></p>
             </div>
 
           </li>
-        ))}
+        )) }
       </IssuesList>
+
+      <PageActions>
+        <button
+          className='btnVoltar'
+          type='button'
+          onClick={ () => handlePage('back') }
+          disabled={ page < 2 }
+        >
+          Voltar
+        </button>
+
+        <button
+          className='btnProximo'
+          type='button'
+          onClick={ () => handlePage('next') }
+        >
+          Proximo
+        </button>
+      </PageActions>
 
     </Container>
   );

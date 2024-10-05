@@ -15,8 +15,8 @@ export const Container = styled.div`
   background-color: #eee;
   border-radius: 6px;
   padding: 30px;
-  margin: 80px auto;
-  box-shadow: 0 0 15px rgba(255, 7, 58, 1);
+  margin: 50px auto;
+  box-shadow: 0 0 10px rgba(255, 7, 58, 1);
   // animation: ${ pulse } 1s infinite alternate;
   border: 1px solid rgba(0, 0, 0, 0.2);
 
