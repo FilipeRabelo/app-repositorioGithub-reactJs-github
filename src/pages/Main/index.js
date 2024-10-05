@@ -7,7 +7,6 @@ import api from '../../services/api';
 
 const Modal = ({ isOpen, onClose, message }) => {
   if (!isOpen) return null;
-
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -21,7 +20,6 @@ const Modal = ({ isOpen, onClose, message }) => {
 
 const ModalExcluir = ({ isOpen, onClose, onConfirm, message }) => {
   if (!isOpen) return null;
-
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -37,19 +35,12 @@ const ModalExcluir = ({ isOpen, onClose, onConfirm, message }) => {
   );
 };
 
-
 export default function Main() {
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); // Novo estado para o modal de confirmação
-  // const [errorMessage, setErrorMessage] = useState('');
-  // const [repoToDelete, setRepoToDelete] = useState(null); // Estado para armazenar o repositório a ser deletado
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); // Modal de confirmação
   const [errorMessage, setErrorMessage] = useState(''); // Mensagem de erro
   const [confirmMessage, setConfirmMessage] = useState(''); // Mensagem de confirmação de exclusão
   const [repoToDelete, setRepoToDelete] = useState(null); // Repositório a ser deletado
-
 
   const [newRepo, setNewRepo] = useState('');             // input q capta o q digita
   const [repositorios, setRepositorio] = useState([]);    // [] para armazenar todos os repositórios cadastrados
@@ -74,12 +65,10 @@ export default function Main() {
   }, [repositorios])  // qndo a state repositorios sofre alteração ela executa esse useEffect
 
 
-
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
 
     async function submit() {          // função responsável por fazer a requisição
-
       setLoading(true);                // habilita o loading
 
       try {
@@ -89,7 +78,6 @@ export default function Main() {
           setIsModalOpen(true);
           throw new Error('Informe o Repositório Desejado.');
         }
-
 
         const response = await api.get(`repos/${ newRepo }`)  // exemplo : https://api.github.com/repo/facebook/react
 
@@ -121,7 +109,6 @@ export default function Main() {
           setNewRepo('');
         } 
 
-
         try {
           // Verificar o limite de requisições
           const rateLimit = await api.get('/rate_limit');
@@ -142,37 +129,6 @@ export default function Main() {
         setLoading(false); // Finaliza o loading
       }
 
-      // } catch (error) {
-      //   console.log(error);
-
-
-      //   if (error.response && error.response.status === 404) {  // Verifica se o erro é de repositório não encontrado
-      //     setErrorMessage('Repositório não existe no GitHub');
-      //     setNewRepo('');
-      //   } else if (error.response && error.response.status === 403) {          
-      //     setErrorMessage('Limite de requisições atingido');
-      //     setNewRepo('');
-      //   }
-
-
-
-      //   // Verificar o limite de requisições
-      //   // const rateLimit = await api.get('/rate_limit');
-      //   // if (rateLimit){
-      //   //   console.log('Limite de requisições:', rateLimit.data);
-      //   //   setErrorMessage('Limite de requisições atingido');
-      //   //   setNewRepo('');
-      //   // }
-
-      //   // Verificar o limite de requisições
-      //   const rateLimit = await api.get('/rate_limit');
-      //   console.log('Limite de requisições:', rateLimit.data);
-
-      //   setIsModalOpen(true);
-
-      // } finally {
-      //   setLoading(false);                          // finaliza o loading
-      // }
     }
 
     submit();
@@ -180,19 +136,10 @@ export default function Main() {
   }, [newRepo, repositorios]);         // qndo uma ou a outra state for atualizada ele chama o useCallback
 
 
-
   function handleInputChange(e) {
     setNewRepo(e.target.value);
   }
 
-
-
-
-  // const handleDelete = useCallback((repo) => {
-  //   setRepoToDelete(repo); // Armazena o repositório a ser deletado
-  //   setErrorMessage('Deseja deletar este repositório?');
-  //   setIsConfirmModalOpen(true); // Abre o modal de confirmação
-  // }, []);
 
   const handleDelete = useCallback((repo) => {
     setRepoToDelete(repo);
@@ -200,14 +147,6 @@ export default function Main() {
     setIsConfirmModalOpen(true);
   }, []);
 
-  // Função para confirmar a deleção
-  // const confirmDelete = useCallback(() => {
-  //   const encontrar = repositorios.filter(r => r.name !== repoToDelete); // Remove o repositório
-  //   setRepositorio(encontrar);
-  //   setIsConfirmModalOpen(false); // Fecha o modal de confirmação
-  //   setErrorMessage('Repositório Deletado!'); // Mensagem de sucesso
-  //   setIsModalOpen(true); // Abre o modal de sucesso
-  // }, [repositorios, repoToDelete]);
 
   // Função para confirmar a deleção
   const confirmDelete = useCallback(() => {
@@ -229,7 +168,6 @@ export default function Main() {
     setIsConfirmModalOpen(false);
     setRepoToDelete(null); // Limpa o repositório armazenado
   };
-
 
 
 
@@ -268,7 +206,7 @@ export default function Main() {
               <DeleteButton onClick={ () => handleDelete(repo.name) }>
                 <FaTrash size={ 18 } color="#DC143C" />
               </DeleteButton>
-              
+
               { repo.name }
             </span>
 
