@@ -7,6 +7,8 @@ export const Loading = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
+
+  
 `;
 
 export const Container = styled.div`
@@ -17,6 +19,10 @@ export const Container = styled.div`
   padding: 30px;
   margin: 80px auto;
   box-shadow: 0 0 15px rgba(255, 7, 58, 1);
+
+   @media (max-width: 750px) {
+    max-width: 90%;
+  }
 `;
 
 export const Owner = styled.header`
