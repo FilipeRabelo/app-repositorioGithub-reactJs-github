@@ -268,6 +268,7 @@ export default function Main() {
               <DeleteButton onClick={ () => handleDelete(repo.name) }>
                 <FaTrash size={ 18 } color="#DC143C" />
               </DeleteButton>
+              
               { repo.name }
             </span>
 

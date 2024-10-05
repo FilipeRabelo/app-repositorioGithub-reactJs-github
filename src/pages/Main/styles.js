@@ -153,7 +153,7 @@ export const List = styled.ul`
 
     span{
       font-weight: bold;
-      
+      text-transform: lowercase;
     }
   }
 `;
