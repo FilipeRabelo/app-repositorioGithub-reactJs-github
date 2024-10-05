@@ -12,7 +12,7 @@ const pulse = keyframes`
 export const Container = styled.div`
   
   max-width: 700px;
-  background-color: #FFFFFF;
+  background-color: #eee;
   border-radius: 6px;
   padding: 30px;
   margin: 80px auto;
@@ -47,7 +47,7 @@ export const Form = styled.form`
   
 
   input{
-    flex: 1;                            // para pegar toda a largura da tela
+    flex: 1;           // para pegar toda a largura da tela
     // border: 1px solid ${ props => (props.error ? '#FF0000' : '#ddd') };
     border: 1px solid #DDD;
     padding: 10px 15px;
@@ -60,6 +60,7 @@ export const Form = styled.form`
 
     &:hover{
       background-color: #f5f5f5;
+      border: 1px solid #6F42C1;
     }
   }
 `;
@@ -122,7 +123,7 @@ export const List = styled.ul`
   li{
     border: 1px solid #aaa;
     border-radius: 4px;
-    background-color: #eee;
+    background-color: #fff;
     padding: 10px 5px 10px 0;
     margin-bottom: 10px;
     display: flex;
